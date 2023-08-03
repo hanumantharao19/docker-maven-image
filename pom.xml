@@ -5,8 +5,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.mycompany.app</groupId>
-  <artifactId>my-app</artifactId>
-  <version>3.3.0</version>
+  <artifactId>my-hr-app</artifactId>
+  <version>3.4.0</version>
 
   <name>my-app</name>
   <!-- FIXME change it to the project's website -->
