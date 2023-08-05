@@ -3,7 +3,7 @@ pipeline {
     parameters {
         string(name: '', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
 
-        choice(name: 'build_goal', choices: ['compile', 'package', 'install'], description: 'select your maven goal')
+        choice(name: 'build_goal', choices: ['install', 'package', 'compile'], description: 'select your maven goal')
 
     }
     tools {
