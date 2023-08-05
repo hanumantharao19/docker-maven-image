@@ -1,12 +1,7 @@
 pipeline {
     agent any
     triggers { cron('* * * *') }
-    parameters {
-        string(name: '', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-
-        choice(name: 'build_goal', choices: ['install', 'package', 'compile'], description: 'select your maven goal')
-
-    }
+    
     tools {
         maven 'maven-3.9.1'
         
@@ -27,7 +22,7 @@ pipeline {
         
         stage('maven build'){
             steps {
-                sh 'mvn clean ${build_goal}'
+                sh 'mvn clean install'
             }
         }
         
