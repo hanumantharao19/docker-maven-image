@@ -13,6 +13,13 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/hanumantharao19/docker-maven-image.git'
             }
         }
+
+        stage('readpom file') {
+            steps {
+                def pom = readMavenPom file: 'pom.xml'
+                version = pom.version
+                echo "pom version: version"
+        }
         
         stage('display jenkins url'){
             steps {
