@@ -1,0 +1,38 @@
+pipeline {
+    
+    agent any
+    tools {
+        maven 'maven-3.9.5'
+    }
+    
+    stages {
+        stage('git clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/hanumantharao19/docker-maven-image.git'
+            }
+        }
+        
+        stage('maven build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        
+        stage('docker login') {
+            steps {
+                sh 'docker login -u hanumantharao1986 -p Haswitha@1986'
+            }
+        }
+        stage('docker build') {
+            steps {
+                sh ' docker build -t hanumantharao1986/javaimage:07112023 .'
+            }
+        }
+        
+        stage('docker push') {
+            steps {
+                sh 'docker push hanumantharao1986/javaimage:07112023 '
+            }
+        } 
+    }
+}
