@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+    
+    environment {
+        // Declare version as a global environment variable so it can be used across stages
+        VERSION = ""
+        DOCKERHUB_CREDENTIALS = credentials('dockermhrcred')
+    }
+    tools {
+        maven 'maven-3.9.5'
+    }
+    stages{
+        stage('git checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/hanumantharao19/docker-maven-image.git'
+            }
+        }
+        
+        stage('maven compiple'){
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        
+        
+        stage('Extract Version') {
+            steps {
+                script {
+                    VERSION = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+                    echo "Project version is: ${VERSION}"
+                }
+            }
+        }
+        
+        
+        stage('docker hub login') {
+            steps{
+                sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            }
+        }
+        
+        stage('docker build') {
+            steps {
+                sh "docker build -t hanumantharao1986/mhr:${VERSION} ."
+            }
+        }
+        
+        stage('docker image to docker registry') {
+            steps {
+                sh "docker push hanumantharao1986/mhr:${VERSION}"
+            }
+        }
+        
+        
+    }
+}
