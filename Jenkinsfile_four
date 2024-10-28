@@ -4,6 +4,9 @@ pipeline {
         maven "maven-3.9.5"
     }
     triggers{ cron ('*/5 * * * *') }
+    options {
+        timeout(time: 20, unit: 'SECONDS') 
+    }
     stages {
         stage('git checkout'){
             steps {
