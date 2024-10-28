@@ -3,7 +3,7 @@ pipeline {
     tools {
         maven "maven-3.9.5"
     }
-    triggers{ cron ('* * * * *') }
+    triggers{ cron ('*/5 * * * *') }
     stages {
         stage('git checkout'){
             steps {
