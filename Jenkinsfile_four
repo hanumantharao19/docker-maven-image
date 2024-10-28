@@ -50,19 +50,19 @@ pipeline {
         }
         stage('doker image build'){
             steps {
-                sh 'docker build -t hanumantharao1986/${IMAGE_NAME}:${PROJECT_VERSION} .'
+                sh "docker build -t hanumantharao1986/${IMAGE_NAME}:${PROJECT_VERSION} ."
             }
         }
         
         stage('Push to docker hub') {
             steps {
-                sh 'docker push hanumantharao1986/${IMAGE_NAME}:${PROJECT_VERSION} '
+                sh "docker push hanumantharao1986/${IMAGE_NAME}:${PROJECT_VERSION} "
             }
         }
         
         stage('deploy image') {
             steps {
-                sh 'docker run -d -p 9000:8080 hanumantharao1986/${IMAGE_NAME}:${PROJECT_VERSION}'
+                sh "docker run -d -p 9000:8080 hanumantharao1986/${IMAGE_NAME}:${PROJECT_VERSION}"
             }
         }
         
