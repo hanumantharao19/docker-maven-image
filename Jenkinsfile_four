@@ -7,6 +7,11 @@ pipeline {
     options {
         timeout(time: 60, unit: 'SECONDS') 
     }
+
+   parameters {
+        string(name: 'image_name', defaultValue: 'sample-java-app', description: 'provide your image name')
+          }
+
     stages {
         stage('git checkout'){
             steps {
@@ -43,19 +48,19 @@ pipeline {
         }
         stage('doker image build'){
             steps {
-                sh 'docker build -t hanumantharao1986/sample-java-app:${PROJECT_VERSION} .'
+                sh 'docker build -t hanumantharao1986/${image_name}:${PROJECT_VERSION} .'
             }
         }
         
         stage('Push to docker hub') {
             steps {
-                sh 'docker push hanumantharao1986/sample-java-app:${PROJECT_VERSION} '
+                sh 'docker push hanumantharao1986/${image_name}:${PROJECT_VERSION} '
             }
         }
         
         stage('deploy image') {
             steps {
-                sh 'docker run -d -p 9000:8080 hanumantharao1986/sample-java-app:${PROJECT_VERSION}'
+                sh 'docker run -d -p 9000:8080 hanumantharao1986/${image_name}:${PROJECT_VERSION}'
             }
         }
         
