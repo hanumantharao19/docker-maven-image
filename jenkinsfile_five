@@ -16,14 +16,15 @@ pipeline {
     }
     stages {
         stage('git checkout'){
+             when {
+                      branch 'main'
+                }
             steps {
                 git branch: 'main', url: 'https://github.com/hanumantharao19/docker-maven-image'
             }
         }
         stage('maven build'){
-              when {
-                      branch 'main'
-                }
+             
             steps {
                 sh 'mvn clean install'
             }
