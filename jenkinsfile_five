@@ -31,7 +31,7 @@ pipeline {
         stage('maven build'){
          
             steps {
-                sh 'mvn -version'
+                sh 'mvn clean install -X' 
             }
         }
         stage('get version form pom.xml'){
