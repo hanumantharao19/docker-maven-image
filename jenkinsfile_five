@@ -19,6 +19,7 @@ pipeline {
           }
    environment {
         IMAGE_NAME = "${params.image_name}"
+        MAVEN_OPTS = '-Dmaven.repo.local=/root/.m2/repository'
     }
     stages {
         stage('git checkout'){
