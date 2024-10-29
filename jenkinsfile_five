@@ -1,0 +1,71 @@
+pipeline {
+    agent any 
+    tools {
+        maven "maven-3.9.5"
+    }
+    triggers{ cron ('*/30 * * * *') }
+    options {
+        timeout(time: 60, unit: 'SECONDS') 
+    }
+
+   parameters {
+        string(name: 'image_name', defaultValue: 'sample-java-app', description: 'provide your image name')
+          }
+   environment {
+        IMAGE_NAME = "${params.image_name}"
+    }
+    stages {
+        stage('git checkout'){
+            steps {
+                git branch: 'main', url: 'https://github.com/hanumantharao19/docker-maven-image'
+            }
+        }
+        stage('maven build'){
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        stage('get version form pom.xml'){
+            steps {
+                script {
+                    
+                   def version = sh(script: "mvn help:evaluate -Dexpression=project.version -q -DforceStdout", returnStdout: true).trim()
+                   echo "Project version is: ${version}"
+
+                   env.PROJECT_VERSION = version // Set the version as an environment variable
+                }
+            }
+        }
+        
+        stage('Docker Hub Login') {
+            steps {
+                script {
+                    // Use credentials stored in Jenkins to login to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: 'dokcerSepCred', usernameVariable: 'DOCKER_USER_MHR', passwordVariable: 'DOCKER_PASS_MHR')]) {
+                        // Login to Docker Hub
+                        sh 'docker login -u $DOCKER_USER_MHR -p $DOCKER_PASS_MHR'
+                    }
+                }
+            }
+        }
+        stage('doker image build'){
+            steps {
+                sh "docker build -t hanumantharao1986/${IMAGE_NAME}:${PROJECT_VERSION} ."
+            }
+        }
+        
+        stage('Push to docker hub') {
+            steps {
+                sh "docker push hanumantharao1986/${IMAGE_NAME}:${PROJECT_VERSION} "
+            }
+        }
+        
+        stage('deploy image') {
+            steps {
+                sh "docker run -d -p 9000:8080 hanumantharao1986/${IMAGE_NAME}:${PROJECT_VERSION}"
+            }
+        }
+        
+        
+    }
+}
