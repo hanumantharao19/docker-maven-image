@@ -20,7 +20,7 @@ pipeline {
                       branch 'main'
                 }
             steps {
-                git branch: 'main', url: 'https://github.com/hanumantharao19/docker-maven-image'
+                git branch: 'dev', url: 'https://github.com/hanumantharao19/docker-maven-image'
             }
         }
         stage('maven build'){
