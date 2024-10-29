@@ -21,6 +21,9 @@ pipeline {
             }
         }
         stage('maven build'){
+              when {
+                      branch 'main'
+                }
             steps {
                 sh 'mvn clean install'
             }
